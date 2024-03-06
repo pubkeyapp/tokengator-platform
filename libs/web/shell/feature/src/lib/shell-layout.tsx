@@ -9,7 +9,7 @@ import {
   SolanaUiClusterSelect,
   WalletIcon,
 } from '@tokengator/web-solana-ui'
-import { AppLogo, UiHeaderProfile } from '@tokengator/web-ui-core'
+import { AppLogo, AppLogoType, UiHeaderProfile } from '@tokengator/web-ui-core'
 import { ReactNode, Suspense } from 'react'
 
 export function ShellLayout({ children }: { children: ReactNode }) {
@@ -19,8 +19,8 @@ export function ShellLayout({ children }: { children: ReactNode }) {
     <UiLayout
       header={
         <UiHeader
-          logoSmall={<AppLogo height={24} />}
-          logo={<AppLogo height={32} />}
+          logoSmall={<AppLogo height={40} />}
+          logo={<AppLogoType height={28} />}
           opened={opened}
           toggle={toggle}
           links={[
