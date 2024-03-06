@@ -8,6 +8,16 @@ input AdminCreateIdentityInput {
   providerId: String!
 }
 
+input AdminCreateProjectInput {
+  name: String!
+}
+
+input AdminCreateProjectMemberInput {
+  projectId: String!
+  role: ProjectMemberRole!
+  userId: String!
+}
+
 input AdminCreateUserInput {
   password: String
   username: String!
@@ -18,12 +28,35 @@ input AdminFindManyIdentityInput {
   provider: IdentityProvider
 }
 
+input AdminFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input AdminFindManyProjectMemberInput {
+  limit: Int = 10
+  page: Int = 1
+  projectId: String!
+  search: String
+}
+
 input AdminFindManyUserInput {
   limit: Int = 10
   page: Int = 1
   role: UserRole
   search: String
   status: UserStatus
+}
+
+input AdminUpdateProjectInput {
+  avatarUrl: String
+  name: String
+  slug: String
+}
+
+input AdminUpdateProjectMemberInput {
+  role: ProjectMemberRole
 }
 
 input AdminUpdateUserInput {
@@ -103,16 +136,28 @@ input LoginInput {
 
 type Mutation {
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
+  adminCreateProject(input: AdminCreateProjectInput!): Project
+  adminCreateProjectMember(input: AdminCreateProjectMemberInput!): ProjectMember
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteIdentity(identityId: String!): Boolean
+  adminDeleteProject(projectId: String!): Boolean
+  adminDeleteProjectMember(projectMemberId: String!): Boolean
   adminDeleteUser(userId: String!): Boolean
+  adminUpdateProject(input: AdminUpdateProjectInput!, projectId: String!): Project
+  adminUpdateProjectMember(input: AdminUpdateProjectMemberInput!, projectMemberId: String!): ProjectMember
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
   register(input: RegisterInput!): User
+  userCreateProject(input: UserCreateProjectInput!): Project
+  userCreateProjectMember(input: UserCreateProjectMemberInput!): ProjectMember
   userDeleteIdentity(identityId: String!): Boolean
+  userDeleteProject(projectId: String!): Boolean
+  userDeleteProjectMember(projectMemberId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userUpdateProject(input: UserUpdateProjectInput!, projectId: String!): Project
+  userUpdateProjectMember(input: UserUpdateProjectMemberInput!, projectMemberId: String!): ProjectMember
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
@@ -127,16 +172,57 @@ type PagingMeta {
   totalCount: Int
 }
 
+type Project {
+  avatarUrl: String
+  createdAt: DateTime
+  id: String!
+  name: String!
+  slug: String!
+  updatedAt: DateTime
+}
+
+type ProjectMember {
+  createdAt: DateTime
+  id: String!
+  projectId: String!
+  role: ProjectMemberRole!
+  updatedAt: DateTime
+  userId: String!
+}
+
+type ProjectMemberPaging {
+  data: [ProjectMember!]!
+  meta: PagingMeta!
+}
+
+enum ProjectMemberRole {
+  Admin
+  Member
+}
+
+type ProjectPaging {
+  data: [Project!]!
+  meta: PagingMeta!
+}
+
 type Query {
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
+  adminFindManyProject(input: AdminFindManyProjectInput!): ProjectPaging!
+  adminFindManyProjectMember(input: AdminFindManyProjectMemberInput!): ProjectMemberPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindOneProject(projectId: String!): Project
+  adminFindOneProjectMember(projectMemberId: String!): ProjectMember
   adminFindOneUser(userId: String!): User
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
   me: User
   uptime: Float!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
+  userFindManyProject(input: UserFindManyProjectInput!): ProjectPaging!
+  userFindManyProjectMember(input: UserFindManyProjectMemberInput!): ProjectMemberPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
+  userFindOneProject(slug: String!): Project
+  userFindOneProjectMember(projectMemberId: String!): ProjectMember
   userFindOneUser(username: String!): User
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
@@ -165,8 +251,31 @@ type User {
   username: String
 }
 
+input UserCreateProjectInput {
+  name: String!
+}
+
+input UserCreateProjectMemberInput {
+  projectId: String!
+  role: ProjectMemberRole!
+  userId: String!
+}
+
 input UserFindManyIdentityInput {
   username: String!
+}
+
+input UserFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input UserFindManyProjectMemberInput {
+  limit: Int = 10
+  page: Int = 1
+  projectId: String!
+  search: String
 }
 
 input UserFindManyUserInput {
@@ -189,6 +298,16 @@ enum UserStatus {
   Active
   Created
   Inactive
+}
+
+input UserUpdateProjectInput {
+  avatarUrl: String
+  name: String
+  slug: String
+}
+
+input UserUpdateProjectMemberInput {
+  role: ProjectMemberRole
 }
 
 input UserUpdateUserInput {

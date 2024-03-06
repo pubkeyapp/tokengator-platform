@@ -30,6 +30,16 @@ export type AdminCreateIdentityInput = {
   providerId: Scalars['String']['input']
 }
 
+export type AdminCreateProjectInput = {
+  name: Scalars['String']['input']
+}
+
+export type AdminCreateProjectMemberInput = {
+  projectId: Scalars['String']['input']
+  role: ProjectMemberRole
+  userId: Scalars['String']['input']
+}
+
 export type AdminCreateUserInput = {
   password?: InputMaybe<Scalars['String']['input']>
   username: Scalars['String']['input']
@@ -40,12 +50,35 @@ export type AdminFindManyIdentityInput = {
   provider?: InputMaybe<IdentityProvider>
 }
 
+export type AdminFindManyProjectInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type AdminFindManyProjectMemberInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  projectId: Scalars['String']['input']
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type AdminFindManyUserInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   role?: InputMaybe<UserRole>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<UserStatus>
+}
+
+export type AdminUpdateProjectInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  slug?: InputMaybe<Scalars['String']['input']>
+}
+
+export type AdminUpdateProjectMemberInput = {
+  role?: InputMaybe<ProjectMemberRole>
 }
 
 export type AdminUpdateUserInput = {
@@ -119,22 +152,42 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation'
   adminCreateIdentity?: Maybe<Identity>
+  adminCreateProject?: Maybe<Project>
+  adminCreateProjectMember?: Maybe<ProjectMember>
   adminCreateUser?: Maybe<User>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteProject?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
+  adminUpdateProject?: Maybe<Project>
+  adminUpdateProjectMember?: Maybe<ProjectMember>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
   register?: Maybe<User>
+  userCreateProject?: Maybe<Project>
+  userCreateProjectMember?: Maybe<ProjectMember>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
+  userDeleteProject?: Maybe<Scalars['Boolean']['output']>
+  userDeleteProjectMember?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userUpdateProject?: Maybe<Project>
+  userUpdateProjectMember?: Maybe<ProjectMember>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
 export type MutationAdminCreateIdentityArgs = {
   input: AdminCreateIdentityInput
+}
+
+export type MutationAdminCreateProjectArgs = {
+  input: AdminCreateProjectInput
+}
+
+export type MutationAdminCreateProjectMemberArgs = {
+  input: AdminCreateProjectMemberInput
 }
 
 export type MutationAdminCreateUserArgs = {
@@ -145,8 +198,26 @@ export type MutationAdminDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
+export type MutationAdminDeleteProjectArgs = {
+  projectId: Scalars['String']['input']
+}
+
+export type MutationAdminDeleteProjectMemberArgs = {
+  projectMemberId: Scalars['String']['input']
+}
+
 export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateProjectArgs = {
+  input: AdminUpdateProjectInput
+  projectId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateProjectMemberArgs = {
+  input: AdminUpdateProjectMemberInput
+  projectMemberId: Scalars['String']['input']
 }
 
 export type MutationAdminUpdateUserArgs = {
@@ -166,12 +237,38 @@ export type MutationRegisterArgs = {
   input: RegisterInput
 }
 
+export type MutationUserCreateProjectArgs = {
+  input: UserCreateProjectInput
+}
+
+export type MutationUserCreateProjectMemberArgs = {
+  input: UserCreateProjectMemberInput
+}
+
 export type MutationUserDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
 }
 
+export type MutationUserDeleteProjectArgs = {
+  projectId: Scalars['String']['input']
+}
+
+export type MutationUserDeleteProjectMemberArgs = {
+  projectMemberId: Scalars['String']['input']
+}
+
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserUpdateProjectArgs = {
+  input: UserUpdateProjectInput
+  projectId: Scalars['String']['input']
+}
+
+export type MutationUserUpdateProjectMemberArgs = {
+  input: UserUpdateProjectMemberInput
+  projectMemberId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateUserArgs = {
@@ -193,17 +290,62 @@ export type PagingMeta = {
   totalCount?: Maybe<Scalars['Int']['output']>
 }
 
+export type Project = {
+  __typename?: 'Project'
+  avatarUrl?: Maybe<Scalars['String']['output']>
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  name: Scalars['String']['output']
+  slug: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export type ProjectMember = {
+  __typename?: 'ProjectMember'
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  projectId: Scalars['String']['output']
+  role: ProjectMemberRole
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  userId: Scalars['String']['output']
+}
+
+export type ProjectMemberPaging = {
+  __typename?: 'ProjectMemberPaging'
+  data: Array<ProjectMember>
+  meta: PagingMeta
+}
+
+export enum ProjectMemberRole {
+  Admin = 'Admin',
+  Member = 'Member',
+}
+
+export type ProjectPaging = {
+  __typename?: 'ProjectPaging'
+  data: Array<Project>
+  meta: PagingMeta
+}
+
 export type Query = {
   __typename?: 'Query'
   adminFindManyIdentity?: Maybe<Array<Identity>>
+  adminFindManyProject: ProjectPaging
+  adminFindManyProjectMember: ProjectMemberPaging
   adminFindManyUser: UserPaging
+  adminFindOneProject?: Maybe<Project>
+  adminFindOneProjectMember?: Maybe<ProjectMember>
   adminFindOneUser?: Maybe<User>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
   me?: Maybe<User>
   uptime: Scalars['Float']['output']
   userFindManyIdentity?: Maybe<Array<Identity>>
+  userFindManyProject: ProjectPaging
+  userFindManyProjectMember: ProjectMemberPaging
   userFindManyUser: UserPaging
+  userFindOneProject?: Maybe<Project>
+  userFindOneProjectMember?: Maybe<ProjectMember>
   userFindOneUser?: Maybe<User>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
@@ -212,8 +354,24 @@ export type QueryAdminFindManyIdentityArgs = {
   input: AdminFindManyIdentityInput
 }
 
+export type QueryAdminFindManyProjectArgs = {
+  input: AdminFindManyProjectInput
+}
+
+export type QueryAdminFindManyProjectMemberArgs = {
+  input: AdminFindManyProjectMemberInput
+}
+
 export type QueryAdminFindManyUserArgs = {
   input: AdminFindManyUserInput
+}
+
+export type QueryAdminFindOneProjectArgs = {
+  projectId: Scalars['String']['input']
+}
+
+export type QueryAdminFindOneProjectMemberArgs = {
+  projectMemberId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneUserArgs = {
@@ -228,8 +386,24 @@ export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
 }
 
+export type QueryUserFindManyProjectArgs = {
+  input: UserFindManyProjectInput
+}
+
+export type QueryUserFindManyProjectMemberArgs = {
+  input: UserFindManyProjectMemberInput
+}
+
 export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
+}
+
+export type QueryUserFindOneProjectArgs = {
+  slug: Scalars['String']['input']
+}
+
+export type QueryUserFindOneProjectMemberArgs = {
+  projectMemberId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneUserArgs = {
@@ -265,8 +439,31 @@ export type User = {
   username?: Maybe<Scalars['String']['output']>
 }
 
+export type UserCreateProjectInput = {
+  name: Scalars['String']['input']
+}
+
+export type UserCreateProjectMemberInput = {
+  projectId: Scalars['String']['input']
+  role: ProjectMemberRole
+  userId: Scalars['String']['input']
+}
+
 export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
+}
+
+export type UserFindManyProjectInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UserFindManyProjectMemberInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  projectId: Scalars['String']['input']
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserFindManyUserInput = {
@@ -290,6 +487,16 @@ export enum UserStatus {
   Active = 'Active',
   Created = 'Created',
   Inactive = 'Inactive',
+}
+
+export type UserUpdateProjectInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  slug?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UserUpdateProjectMemberInput = {
+  role?: InputMaybe<ProjectMemberRole>
 }
 
 export type UserUpdateUserInput = {
@@ -647,6 +854,378 @@ export type AnonVerifyIdentityChallengeMutation = {
   } | null
 }
 
+export type ProjectMemberDetailsFragment = {
+  __typename?: 'ProjectMember'
+  createdAt?: Date | null
+  id: string
+  role: ProjectMemberRole
+  projectId: string
+  userId: string
+  updatedAt?: Date | null
+}
+
+export type UserFindManyProjectMemberQueryVariables = Exact<{
+  input: UserFindManyProjectMemberInput
+}>
+
+export type UserFindManyProjectMemberQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ProjectMemberPaging'
+    data: Array<{
+      __typename?: 'ProjectMember'
+      createdAt?: Date | null
+      id: string
+      role: ProjectMemberRole
+      projectId: string
+      userId: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneProjectMemberQueryVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+}>
+
+export type UserFindOneProjectMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserCreateProjectMemberMutationVariables = Exact<{
+  input: UserCreateProjectMemberInput
+}>
+
+export type UserCreateProjectMemberMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserUpdateProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+  input: UserUpdateProjectMemberInput
+}>
+
+export type UserUpdateProjectMemberMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserDeleteProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+}>
+
+export type UserDeleteProjectMemberMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyProjectMemberQueryVariables = Exact<{
+  input: AdminFindManyProjectMemberInput
+}>
+
+export type AdminFindManyProjectMemberQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ProjectMemberPaging'
+    data: Array<{
+      __typename?: 'ProjectMember'
+      createdAt?: Date | null
+      id: string
+      role: ProjectMemberRole
+      projectId: string
+      userId: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneProjectMemberQueryVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+}>
+
+export type AdminFindOneProjectMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreateProjectMemberMutationVariables = Exact<{
+  input: AdminCreateProjectMemberInput
+}>
+
+export type AdminCreateProjectMemberMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+  input: AdminUpdateProjectMemberInput
+}>
+
+export type AdminUpdateProjectMemberMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'ProjectMember'
+    createdAt?: Date | null
+    id: string
+    role: ProjectMemberRole
+    projectId: string
+    userId: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+}>
+
+export type AdminDeleteProjectMemberMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type ProjectDetailsFragment = {
+  __typename?: 'Project'
+  createdAt?: Date | null
+  id: string
+  name: string
+  avatarUrl?: string | null
+  slug: string
+  updatedAt?: Date | null
+}
+
+export type UserFindManyProjectQueryVariables = Exact<{
+  input: UserFindManyProjectInput
+}>
+
+export type UserFindManyProjectQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ProjectPaging'
+    data: Array<{
+      __typename?: 'Project'
+      createdAt?: Date | null
+      id: string
+      name: string
+      avatarUrl?: string | null
+      slug: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneProjectQueryVariables = Exact<{
+  slug: Scalars['String']['input']
+}>
+
+export type UserFindOneProjectQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserCreateProjectMutationVariables = Exact<{
+  input: UserCreateProjectInput
+}>
+
+export type UserCreateProjectMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserUpdateProjectMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+  input: UserUpdateProjectInput
+}>
+
+export type UserUpdateProjectMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type UserDeleteProjectMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+}>
+
+export type UserDeleteProjectMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyProjectQueryVariables = Exact<{
+  input: AdminFindManyProjectInput
+}>
+
+export type AdminFindManyProjectQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'ProjectPaging'
+    data: Array<{
+      __typename?: 'Project'
+      createdAt?: Date | null
+      id: string
+      name: string
+      avatarUrl?: string | null
+      slug: string
+      updatedAt?: Date | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminFindOneProjectQueryVariables = Exact<{
+  projectId: Scalars['String']['input']
+}>
+
+export type AdminFindOneProjectQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreateProjectMutationVariables = Exact<{
+  input: AdminCreateProjectInput
+}>
+
+export type AdminCreateProjectMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateProjectMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+  input: AdminUpdateProjectInput
+}>
+
+export type AdminUpdateProjectMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Project'
+    createdAt?: Date | null
+    id: string
+    name: string
+    avatarUrl?: string | null
+    slug: string
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteProjectMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+}>
+
+export type AdminDeleteProjectMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
 export type UserDetailsFragment = {
   __typename?: 'User'
   avatarUrl?: string | null
@@ -904,6 +1483,26 @@ export const IdentityChallengeDetailsFragmentDoc = gql`
     verified
   }
 `
+export const ProjectMemberDetailsFragmentDoc = gql`
+  fragment ProjectMemberDetails on ProjectMember {
+    createdAt
+    id
+    role
+    projectId
+    userId
+    updatedAt
+  }
+`
+export const ProjectDetailsFragmentDoc = gql`
+  fragment ProjectDetails on Project {
+    createdAt
+    id
+    name
+    avatarUrl
+    slug
+    updatedAt
+  }
+`
 export const UserDetailsFragmentDoc = gql`
   fragment UserDetails on User {
     avatarUrl
@@ -1042,6 +1641,178 @@ export const AnonVerifyIdentityChallengeDocument = gql`
   }
   ${IdentityChallengeDetailsFragmentDoc}
 `
+export const UserFindManyProjectMemberDocument = gql`
+  query userFindManyProjectMember($input: UserFindManyProjectMemberInput!) {
+    paging: userFindManyProjectMember(input: $input) {
+      data {
+        ...ProjectMemberDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneProjectMemberDocument = gql`
+  query userFindOneProjectMember($projectMemberId: String!) {
+    item: userFindOneProjectMember(projectMemberId: $projectMemberId) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const UserCreateProjectMemberDocument = gql`
+  mutation userCreateProjectMember($input: UserCreateProjectMemberInput!) {
+    created: userCreateProjectMember(input: $input) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const UserUpdateProjectMemberDocument = gql`
+  mutation userUpdateProjectMember($projectMemberId: String!, $input: UserUpdateProjectMemberInput!) {
+    updated: userUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const UserDeleteProjectMemberDocument = gql`
+  mutation userDeleteProjectMember($projectMemberId: String!) {
+    deleted: userDeleteProjectMember(projectMemberId: $projectMemberId)
+  }
+`
+export const AdminFindManyProjectMemberDocument = gql`
+  query adminFindManyProjectMember($input: AdminFindManyProjectMemberInput!) {
+    paging: adminFindManyProjectMember(input: $input) {
+      data {
+        ...ProjectMemberDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneProjectMemberDocument = gql`
+  query adminFindOneProjectMember($projectMemberId: String!) {
+    item: adminFindOneProjectMember(projectMemberId: $projectMemberId) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const AdminCreateProjectMemberDocument = gql`
+  mutation adminCreateProjectMember($input: AdminCreateProjectMemberInput!) {
+    created: adminCreateProjectMember(input: $input) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const AdminUpdateProjectMemberDocument = gql`
+  mutation adminUpdateProjectMember($projectMemberId: String!, $input: AdminUpdateProjectMemberInput!) {
+    updated: adminUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const AdminDeleteProjectMemberDocument = gql`
+  mutation adminDeleteProjectMember($projectMemberId: String!) {
+    deleted: adminDeleteProjectMember(projectMemberId: $projectMemberId)
+  }
+`
+export const UserFindManyProjectDocument = gql`
+  query userFindManyProject($input: UserFindManyProjectInput!) {
+    paging: userFindManyProject(input: $input) {
+      data {
+        ...ProjectDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneProjectDocument = gql`
+  query userFindOneProject($slug: String!) {
+    item: userFindOneProject(slug: $slug) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const UserCreateProjectDocument = gql`
+  mutation userCreateProject($input: UserCreateProjectInput!) {
+    created: userCreateProject(input: $input) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const UserUpdateProjectDocument = gql`
+  mutation userUpdateProject($projectId: String!, $input: UserUpdateProjectInput!) {
+    updated: userUpdateProject(projectId: $projectId, input: $input) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const UserDeleteProjectDocument = gql`
+  mutation userDeleteProject($projectId: String!) {
+    deleted: userDeleteProject(projectId: $projectId)
+  }
+`
+export const AdminFindManyProjectDocument = gql`
+  query adminFindManyProject($input: AdminFindManyProjectInput!) {
+    paging: adminFindManyProject(input: $input) {
+      data {
+        ...ProjectDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminFindOneProjectDocument = gql`
+  query adminFindOneProject($projectId: String!) {
+    item: adminFindOneProject(projectId: $projectId) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const AdminCreateProjectDocument = gql`
+  mutation adminCreateProject($input: AdminCreateProjectInput!) {
+    created: adminCreateProject(input: $input) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const AdminUpdateProjectDocument = gql`
+  mutation adminUpdateProject($projectId: String!, $input: AdminUpdateProjectInput!) {
+    updated: adminUpdateProject(projectId: $projectId, input: $input) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const AdminDeleteProjectDocument = gql`
+  mutation adminDeleteProject($projectId: String!) {
+    deleted: adminDeleteProject(projectId: $projectId)
+  }
+`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -1144,6 +1915,26 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
+const UserFindManyProjectMemberDocumentString = print(UserFindManyProjectMemberDocument)
+const UserFindOneProjectMemberDocumentString = print(UserFindOneProjectMemberDocument)
+const UserCreateProjectMemberDocumentString = print(UserCreateProjectMemberDocument)
+const UserUpdateProjectMemberDocumentString = print(UserUpdateProjectMemberDocument)
+const UserDeleteProjectMemberDocumentString = print(UserDeleteProjectMemberDocument)
+const AdminFindManyProjectMemberDocumentString = print(AdminFindManyProjectMemberDocument)
+const AdminFindOneProjectMemberDocumentString = print(AdminFindOneProjectMemberDocument)
+const AdminCreateProjectMemberDocumentString = print(AdminCreateProjectMemberDocument)
+const AdminUpdateProjectMemberDocumentString = print(AdminUpdateProjectMemberDocument)
+const AdminDeleteProjectMemberDocumentString = print(AdminDeleteProjectMemberDocument)
+const UserFindManyProjectDocumentString = print(UserFindManyProjectDocument)
+const UserFindOneProjectDocumentString = print(UserFindOneProjectDocument)
+const UserCreateProjectDocumentString = print(UserCreateProjectDocument)
+const UserUpdateProjectDocumentString = print(UserUpdateProjectDocument)
+const UserDeleteProjectDocumentString = print(UserDeleteProjectDocument)
+const AdminFindManyProjectDocumentString = print(AdminFindManyProjectDocument)
+const AdminFindOneProjectDocumentString = print(AdminFindOneProjectDocument)
+const AdminCreateProjectDocumentString = print(AdminCreateProjectDocument)
+const AdminUpdateProjectDocumentString = print(AdminUpdateProjectDocument)
+const AdminDeleteProjectDocumentString = print(AdminDeleteProjectDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -1457,6 +2248,426 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    userFindManyProjectMember(
+      variables: UserFindManyProjectMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyProjectMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyProjectMemberQuery>(UserFindManyProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyProjectMember',
+        'query',
+        variables,
+      )
+    },
+    userFindOneProjectMember(
+      variables: UserFindOneProjectMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneProjectMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneProjectMemberQuery>(UserFindOneProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneProjectMember',
+        'query',
+        variables,
+      )
+    },
+    userCreateProjectMember(
+      variables: UserCreateProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateProjectMemberMutation>(UserCreateProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateProjectMember(
+      variables: UserUpdateProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateProjectMemberMutation>(UserUpdateProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteProjectMember(
+      variables: UserDeleteProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteProjectMemberMutation>(UserDeleteProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyProjectMember(
+      variables: AdminFindManyProjectMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyProjectMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyProjectMemberQuery>(AdminFindManyProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyProjectMember',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneProjectMember(
+      variables: AdminFindOneProjectMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneProjectMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneProjectMemberQuery>(AdminFindOneProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneProjectMember',
+        'query',
+        variables,
+      )
+    },
+    adminCreateProjectMember(
+      variables: AdminCreateProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateProjectMemberMutation>(AdminCreateProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateProjectMember(
+      variables: AdminUpdateProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateProjectMemberMutation>(AdminUpdateProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteProjectMember(
+      variables: AdminDeleteProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteProjectMemberMutation>(AdminDeleteProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteProjectMember',
+        'mutation',
+        variables,
+      )
+    },
+    userFindManyProject(
+      variables: UserFindManyProjectQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyProjectQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyProjectQuery>(UserFindManyProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyProject',
+        'query',
+        variables,
+      )
+    },
+    userFindOneProject(
+      variables: UserFindOneProjectQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneProjectQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneProjectQuery>(UserFindOneProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneProject',
+        'query',
+        variables,
+      )
+    },
+    userCreateProject(
+      variables: UserCreateProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserCreateProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserCreateProjectMutation>(UserCreateProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userCreateProject',
+        'mutation',
+        variables,
+      )
+    },
+    userUpdateProject(
+      variables: UserUpdateProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserUpdateProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserUpdateProjectMutation>(UserUpdateProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userUpdateProject',
+        'mutation',
+        variables,
+      )
+    },
+    userDeleteProject(
+      variables: UserDeleteProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserDeleteProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserDeleteProjectMutation>(UserDeleteProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userDeleteProject',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyProject(
+      variables: AdminFindManyProjectQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyProjectQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyProjectQuery>(AdminFindManyProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyProject',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneProject(
+      variables: AdminFindOneProjectQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneProjectQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneProjectQuery>(AdminFindOneProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneProject',
+        'query',
+        variables,
+      )
+    },
+    adminCreateProject(
+      variables: AdminCreateProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateProjectMutation>(AdminCreateProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateProject',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateProject(
+      variables: AdminUpdateProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateProjectMutation>(AdminUpdateProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateProject',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteProject(
+      variables: AdminDeleteProjectMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteProjectMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteProjectMutation>(AdminDeleteProjectDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteProject',
+        'mutation',
+        variables,
+      )
+    },
     adminCreateUser(
       variables: AdminCreateUserMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -1641,6 +2852,8 @@ export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
+export const ProjectMemberRoleSchema = z.nativeEnum(ProjectMemberRole)
+
 export const UserRoleSchema = z.nativeEnum(UserRole)
 
 export const UserStatusSchema = z.nativeEnum(UserStatus)
@@ -1650,6 +2863,20 @@ export function AdminCreateIdentityInputSchema(): z.ZodObject<Properties<AdminCr
     ownerId: z.string(),
     provider: IdentityProviderSchema,
     providerId: z.string(),
+  })
+}
+
+export function AdminCreateProjectInputSchema(): z.ZodObject<Properties<AdminCreateProjectInput>> {
+  return z.object({
+    name: z.string(),
+  })
+}
+
+export function AdminCreateProjectMemberInputSchema(): z.ZodObject<Properties<AdminCreateProjectMemberInput>> {
+  return z.object({
+    projectId: z.string(),
+    role: ProjectMemberRoleSchema,
+    userId: z.string(),
   })
 }
 
@@ -1667,6 +2894,23 @@ export function AdminFindManyIdentityInputSchema(): z.ZodObject<Properties<Admin
   })
 }
 
+export function AdminFindManyProjectInputSchema(): z.ZodObject<Properties<AdminFindManyProjectInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function AdminFindManyProjectMemberInputSchema(): z.ZodObject<Properties<AdminFindManyProjectMemberInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    projectId: z.string(),
+    search: z.string().nullish(),
+  })
+}
+
 export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFindManyUserInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -1674,6 +2918,20 @@ export function AdminFindManyUserInputSchema(): z.ZodObject<Properties<AdminFind
     role: UserRoleSchema.nullish(),
     search: z.string().nullish(),
     status: UserStatusSchema.nullish(),
+  })
+}
+
+export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpdateProjectInput>> {
+  return z.object({
+    avatarUrl: z.string().nullish(),
+    name: z.string().nullish(),
+    slug: z.string().nullish(),
+  })
+}
+
+export function AdminUpdateProjectMemberInputSchema(): z.ZodObject<Properties<AdminUpdateProjectMemberInput>> {
+  return z.object({
+    role: ProjectMemberRoleSchema.nullish(),
   })
 }
 
@@ -1716,9 +2974,40 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   })
 }
 
+export function UserCreateProjectInputSchema(): z.ZodObject<Properties<UserCreateProjectInput>> {
+  return z.object({
+    name: z.string(),
+  })
+}
+
+export function UserCreateProjectMemberInputSchema(): z.ZodObject<Properties<UserCreateProjectMemberInput>> {
+  return z.object({
+    projectId: z.string(),
+    role: ProjectMemberRoleSchema,
+    userId: z.string(),
+  })
+}
+
 export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFindManyIdentityInput>> {
   return z.object({
     username: z.string(),
+  })
+}
+
+export function UserFindManyProjectInputSchema(): z.ZodObject<Properties<UserFindManyProjectInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function UserFindManyProjectMemberInputSchema(): z.ZodObject<Properties<UserFindManyProjectMemberInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    projectId: z.string(),
+    search: z.string().nullish(),
   })
 }
 
@@ -1727,6 +3016,20 @@ export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindMa
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+  })
+}
+
+export function UserUpdateProjectInputSchema(): z.ZodObject<Properties<UserUpdateProjectInput>> {
+  return z.object({
+    avatarUrl: z.string().nullish(),
+    name: z.string().nullish(),
+    slug: z.string().nullish(),
+  })
+}
+
+export function UserUpdateProjectMemberInputSchema(): z.ZodObject<Properties<UserUpdateProjectMemberInput>> {
+  return z.object({
+    role: ProjectMemberRoleSchema.nullish(),
   })
 }
 
