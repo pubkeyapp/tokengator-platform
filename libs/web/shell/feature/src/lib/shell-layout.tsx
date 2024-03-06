@@ -1,5 +1,6 @@
 import { Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { UiHeader, UiLayout, UiLoader } from '@pubkey-ui/core'
 import { useAuth } from '@tokengator/web-auth-data-access'
 import {
   SolanaUiAccountBalanceButton,
@@ -8,8 +9,7 @@ import {
   SolanaUiClusterSelect,
   WalletIcon,
 } from '@tokengator/web-solana-ui'
-import { UiHeaderProfile } from '@tokengator/web-ui-core'
-import { UiHeader, UiLayout, UiLoader } from '@pubkey-ui/core'
+import { AppLogo, UiHeaderProfile } from '@tokengator/web-ui-core'
 import { ReactNode, Suspense } from 'react'
 
 export function ShellLayout({ children }: { children: ReactNode }) {
@@ -19,6 +19,8 @@ export function ShellLayout({ children }: { children: ReactNode }) {
     <UiLayout
       header={
         <UiHeader
+          logoSmall={<AppLogo height={24} />}
+          logo={<AppLogo height={32} />}
           opened={opened}
           toggle={toggle}
           links={[
