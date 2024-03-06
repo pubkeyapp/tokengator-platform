@@ -1,0 +1,74 @@
+fragment ProjectMemberDetails on ProjectMember {
+  createdAt
+  id
+  role
+  projectId
+  userId
+  updatedAt
+}
+
+query userFindManyProjectMember($input: UserFindManyProjectMemberInput!) {
+  paging: userFindManyProjectMember(input: $input) {
+    data {
+      ...ProjectMemberDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOneProjectMember($projectMemberId: String!) {
+  item: userFindOneProjectMember(projectMemberId: $projectMemberId) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation userCreateProjectMember($input: UserCreateProjectMemberInput!) {
+  created: userCreateProjectMember(input: $input) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation userUpdateProjectMember($projectMemberId: String!, $input: UserUpdateProjectMemberInput!) {
+  updated: userUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation userDeleteProjectMember($projectMemberId: String!) {
+  deleted: userDeleteProjectMember(projectMemberId: $projectMemberId)
+}
+
+query adminFindManyProjectMember($input: AdminFindManyProjectMemberInput!) {
+  paging: adminFindManyProjectMember(input: $input) {
+    data {
+      ...ProjectMemberDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOneProjectMember($projectMemberId: String!) {
+  item: adminFindOneProjectMember(projectMemberId: $projectMemberId) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation adminCreateProjectMember($input: AdminCreateProjectMemberInput!) {
+  created: adminCreateProjectMember(input: $input) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation adminUpdateProjectMember($projectMemberId: String!, $input: AdminUpdateProjectMemberInput!) {
+  updated: adminUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+    ...ProjectMemberDetails
+  }
+}
+
+mutation adminDeleteProjectMember($projectMemberId: String!) {
+  deleted: adminDeleteProjectMember(projectMemberId: $projectMemberId)
+}
